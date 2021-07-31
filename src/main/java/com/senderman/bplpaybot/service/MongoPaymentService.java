@@ -4,6 +4,7 @@ import com.senderman.bplpaybot.model.Payment;
 import com.senderman.bplpaybot.repository.PaymentRepository;
 import org.jvnet.hk2.annotations.Service;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 @Service
@@ -18,6 +19,11 @@ public class MongoPaymentService implements PaymentService {
     @Override
     public Payment save(Payment payment) {
         return repository.save(payment);
+    }
+
+    @Override
+    public void saveAll(Collection<Payment> payments) {
+        repository.saveAll(payments);
     }
 
     @Override
@@ -53,5 +59,10 @@ public class MongoPaymentService implements PaymentService {
     @Override
     public void delete(Payment payment) {
         repository.delete(payment);
+    }
+
+    @Override
+    public void deleteAll(Collection<Payment> payments) {
+        repository.deleteAll(payments);
     }
 }

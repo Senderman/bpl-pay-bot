@@ -8,6 +8,8 @@ import com.senderman.bplpaybot.model.Payment;
 import com.senderman.bplpaybot.service.PaymentService;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -24,6 +26,8 @@ public class QiwiPaymentPolling {
     private final CommonAbsSender botSender;
     private final long timeout = TimeUnit.MINUTES.toMillis(5);
     private boolean doPolling;
+    private final List<Payment> paymentsToDelete = new LinkedList<>();
+    private final List<Payment> paymentsToUpdate = new LinkedList<>();
 
     public QiwiPaymentPolling(
             PaymentService paymentService,
@@ -53,6 +57,10 @@ public class QiwiPaymentPolling {
     private void polling() {
         while (doPolling) {
             paymentService.findUnpaid().forEach(this::processBill);
+            paymentService.saveAll(paymentsToUpdate);
+            paymentsToUpdate.clear();
+            paymentService.deleteAll(paymentsToDelete);
+            paymentsToDelete.clear();
             try {
                 Thread.sleep(timeout);
             } catch (InterruptedException e) {
@@ -77,7 +85,7 @@ public class QiwiPaymentPolling {
             var amount = payment.getCoins();
             bplIdSystem.increaseMoney(userId, amount);
             payment.setPaid(true);
-            paymentService.save(payment);
+            paymentsToUpdate.add(payment);
             sendMessage(userId, "На ваш счет успешно зачислено %d BPL Коинов!".formatted(amount)).callAsync(botSender);
         } catch (InternalServerErrorException e) {
             notifyError(e);
@@ -85,14 +93,14 @@ public class QiwiPaymentPolling {
     }
 
     private void processRejectedBill(Payment payment) {
-        paymentService.delete(payment);
+        paymentsToDelete.add(payment);
         var userId = payment.getTelegramId();
         var amount = payment.getCoins();
         sendMessage(userId, "Ваш платеж на %d BPL Коинов был отклонен".formatted(amount)).callAsync(botSender);
     }
 
     private void processExpiredBill(Payment payment) {
-        paymentService.delete(payment);
+        paymentsToDelete.add(payment);
         var userId = payment.getTelegramId();
         var amount = payment.getCoins();
         sendMessage(userId, "Оплата платежа на %d BPL Коинов истек!".formatted(amount)).callAsync(botSender);

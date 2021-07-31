@@ -11,20 +11,21 @@ public class Payment {
 
     private long telegramId;
     private int coins;
-    private int rubles;
+    private int price;
     private boolean isPaid;
+    private String payUrl;
 
     public Payment() {
     }
 
-    public Payment(String id, long telegramId, int coins, int rubles, boolean isPaid) {
+    public Payment(String id, long telegramId, int coins, int price, boolean isPaid) {
         this.telegramId = telegramId;
         this.coins = coins;
-        this.rubles = rubles;
+        this.price = price;
         this.isPaid = isPaid;
     }
 
-    public Payment(String id, int telegramId, int coins, int rubles) {
+    public Payment(String id, long telegramId, int coins, int rubles) {
         this(id, telegramId, coins, rubles, false);
     }
 
@@ -52,12 +53,12 @@ public class Payment {
         this.coins = coins;
     }
 
-    public int getRubles() {
-        return rubles;
+    public int getPrice() {
+        return price;
     }
 
-    public void setRubles(int rubles) {
-        this.rubles = rubles;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public boolean isPaid() {
@@ -66,5 +67,13 @@ public class Payment {
 
     public void setPaid(boolean paid) {
         isPaid = paid;
+    }
+
+    public String getPayUrl() {
+        return payUrl;
+    }
+
+    public void setPayUrl(String payUrl) {
+        this.payUrl = payUrl;
     }
 }
