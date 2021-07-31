@@ -1,0 +1,17 @@
+spring:
+  data:
+    mongodb:
+      uri: ${mongodb}
+      database: bplpaybot
+
+logging:
+  level:
+    root: ERROR
+
+qiwi-secret: ${qiwi-secret}
+telegram-username: ${telegram-username}
+telegram-token: ${telegram-token}
+main-admin-id: ${main-admin}
+notify-channel-id: ${notify-channel-id}
+bpl-token: ${bpl-token}
+bpl-url: ${bpl-url}

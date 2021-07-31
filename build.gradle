@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.0-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group 'com.senderman'
+version '1.0'
+sourceCompatibility = JavaVersion.VERSION_16
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    implementation 'com.annimon:tgbots-module:0.15'
+    implementation 'com.qiwi:bill-payments-java-sdk:1.5.0'
+}
