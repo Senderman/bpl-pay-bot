@@ -53,12 +53,13 @@ public class BplIdSystemImpl implements BplIdSystem {
     @Override
     public void increaseMoney(long id, int amount) throws InternalServerErrorException {
         var params = new HashMap<String, String>();
-        params.put("tg_id", String.valueOf(id));
+        params.put("telegram", String.valueOf(id));
         params.put("auth_token", bplToken);
-        params.put("amount", String.valueOf(amount));
+        params.put("count", String.valueOf(amount));
         var resp = restTemplate.exchange(
                 // TODO изменить адрес когда этот долбаеб сделает метод
-                bplUrl + "get_user_by_tg_id/{tg_id}?auth_token={auth_token}",
+                // изменил
+                bplUrl + "inc_money_tg/?auth_token={auth_token}&count={count}&telegram={telegram}",
                 HttpMethod.GET,
                 null,
                 responseTypeRef,
